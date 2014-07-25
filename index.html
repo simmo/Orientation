@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1">
+    
+    <style>
+      
+      #box {
+        position: relative;
+        
+        width: 100px;
+        height: 100px;
+        
+        border: 1px solid #000;
+      }
+      
+      #ball {
+        transition: all .1s;
+        
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        
+        width: 10px;
+        height: 10px;
+        margin-top: -5px;
+        margin-left: -5px;
+        
+        background: #000;
+        border-radius: 100%;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <h1>Device motion test</h1>
+    <p><strong>Z: </strong><span id="z"></span></p>
+    <p><strong>X: </strong><span id="x"></span></p>
+    <p><strong>Y: </strong><span id="y"></span></p>
+    <p><strong>Orientation: </strong><span id="orientation"></span></p>
+    
+    <div id="box">
+      <div id="ball"></div>
+    </div>
+    
+    <script>
+      var output = {
+        z: document.getElementById('z'),
+        x: document.getElementById('x'),
+        y: document.getElementById('y'),
+        orientation: document.getElementById('orientation'),
+        box: document.getElementById('box'),
+        ball: document.getElementById('ball')
+      };
+      
+      function handleOrientation(event) {
+        var alpha    = event.alpha;
+        var beta     = event.beta;
+        var gamma    = event.gamma;
+        
+        var z = alpha, x, y;
+        if (Math.abs(window.orientation) == 90) {
+          x = window.orientation == -90 ? 0-beta : beta;
+          y = window.orientation == 90 ? 0-gamma : gamma;
+        } else {
+          x = gamma;
+          y = beta;
+        }
+        
+        output.z.innerHTML = z;
+        output.x.innerHTML = x;
+        output.y.innerHTML = y;
+        output.orientation.innerHTML = window.orientation + "&deg;";
+        
+        output.z.style.color = z > 0 ? 'green' : 'red';
+        output.x.style.color =  x > 0 ? 'green' : 'red';
+        output.y.style.color = y > 0 ? 'green' : 'red';
+        
+        output.ball.style.webkitTransform = "translate3d(" + Math.round(x) + "px, " + Math.round(y) + "px, 0)"
+      }
+      
+      window.addEventListener('deviceorientation', handleOrientation);
+    </script>
+  </body>
+</html>
